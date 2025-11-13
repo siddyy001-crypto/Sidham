@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sidham — Royal Reveal</title>
+
+  <!-- Fonts & GSAP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Playfair+Display:wght@400;600;700;900&family=Merriweather:wght@300;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+
+  <!-- Firebase compat CDN (keeps existing code intact) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <style>
+    :root{
+      /* royal gold + deep maroon palette */
+      --bg1: #fff6f2;
+      --bg2: #fff0ee;
+      --royal: #5a203a;        /* deep maroon */
+      --gold-1: #d4a017;
+      --gold-2: #f3cf56;
+      --glass: rgba(255,255,255,0.44);
+      --glass-2: rgba(255,255,255,0.26);
+      --glass-border: rgba(255,244,210,0.6);
+      --blur: 16px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{
+      height:100%;margin:0;font-family:Merriweather, 'Playfair Display', Cinzel, serif;
+      background:
+        radial-gradient(900px 420px at 8% 8%, rgba(243,207,86,0.06), transparent),
+        radial-gradient(700px 360px at 92% 92%, rgba(212,160,40,0.05), transparent),
+        linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:var(--royal); -webkit-font-smoothing:antialiased; overflow-x:hidden;
+    }
+
+    /* Stage (single column) */
+    .stage{
+      min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
+      padding:28px 18px; gap:34px; position:relative; text-align:center; max-width:780px; margin:0 auto;
+    }
+
+    /* full-canvas background for animals + sparkles */
+    canvas#particles{ position:absolute; inset:0; z-index:0; pointer-events:none; }
+
+    .hero{ z-index:3; padding:10px 0; width:100%; display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px }
+    .brand{ display:flex; gap:12px; align-items:center; justify-content:center }
+    .logo{
+      width:78px; height:78px; border-radius:20px; overflow:hidden;
+      box-shadow: 0 12px 40px rgba(90,32,58,0.12), inset 0 6px 18px rgba(255,230,180,0.18);
+      border: 2px solid rgba(212,160,40,0.12); background: linear-gradient(180deg,#fff4f2,#ffefee);
+      display:flex; align-items:center; justify-content:center; font-family:Cinzel, serif;
+      color:var(--royal); font-weight:700; letter-spacing:1px; font-size:20px;
+    }
+
+    h1{
+      font-family:Cinzel, 'Playfair Display', serif; font-weight:700; font-size:36px; margin:6px 0 0;
+      color:var(--royal);
+      text-shadow: 0 6px 18px rgba(212,150,60,0.08), 0 1px 0 rgba(255,255,255,0.6) inset;
+    }
+
+    .glow-line{
+      height:4px; width:160px; border-radius:40px;
+      background: linear-gradient(90deg, rgba(212,160,40,0.95), rgba(243,207,86,0.85));
+      box-shadow: 0 6px 30px rgba(243,207,86,0.12); margin:8px auto 0;
+    }
+
+    /* Card — liquid gold glass with embroidered vibe */
+    .card-wrap{ z-index:4; width:100%; display:flex; justify-content:center }
+    .card{
+      width:100%; max-width:640px;
+      background: linear-gradient(180deg,var(--glass),var(--glass-2));
+      border-radius:26px; padding:30px; border:1px solid var(--glass-border);
+      backdrop-filter: blur(var(--blur)); box-shadow: 0 22px 80px rgba(90,32,58,0.12);
+      position:relative; overflow:visible;
+    }
+
+    /* embroidered decorative frame */
+    .card:before{
+      content:"";
+      position:absolute; inset:-6px; border-radius:30px; pointer-events:none;
+      background:
+        linear-gradient(135deg, rgba(212,160,40,0.02), rgba(255,245,230,0.02));
+      box-shadow: 0 0 0 2px rgba(212,160,40,0.06) inset, 0 6px 20px rgba(210,150,50,0.04);
+    }
+
+    .card h2{ font-family:Cinzel, serif; margin:0 0 14px; font-size:22px; color:var(--gold-1); text-align:center; text-transform:uppercase; letter-spacing:1px; text-shadow: 0 3px 0 rgba(0,0,0,0.06); }
+
+    /* Felt/embroidered input row */
+    .pwd-row{ display:flex; gap:14px; align-items:center; flex-direction:column; margin-top:6px; }
+    input[type="password"]{
+      width:100%; padding:14px 18px; border-radius:22px; border:none;
+      background:
+        repeating-linear-gradient(135deg, rgba(255,250,245,0.95) 0 6px, rgba(255,245,240,0.95) 6px 12px),
+        linear-gradient(180deg,#fff7f6,#fff1ef);
+      color:var(--royal); font-size:16px; outline:none;
+      box-shadow: inset 0 8px 18px rgba(212,160,40,0.06), 0 8px 28px rgba(90,32,58,0.06);
+      border: 1px solid rgba(212,160,40,0.12); font-family: 'Playfair Display', serif;
+    }
+
+    /* Hefty luxurious embroidered button */
+    button.primary{
+      width:100%; padding:14px 18px; border-radius:22px; border:none; cursor:pointer;
+      font-family:Cinzel, 'Playfair Display', serif; font-weight:700; letter-spacing:0.6px; text-transform:uppercase;
+      background: linear-gradient(180deg, #f6d68a 0%, #d7a61b 60%, #c58f12 100%);
+      color:#3a1d27; box-shadow:
+        inset 0 6px 14px rgba(255,255,255,0.6),
+        0 10px 30px rgba(197,140,30,0.18),
+        0 2px 0 rgba(0,0,0,0.08);
+      border: 1px solid rgba(255,245,210,0.6);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    button.primary:active{ transform: translateY(1px) scale(0.995); box-shadow: 0 6px 18px rgba(197,140,30,0.16); }
+    button.primary:hover{ transform: translateY(-4px); box-shadow: 0 18px 40px rgba(197,140,30,0.22); }
+
+    .hint{ font-size:13px; color:rgba(90,32,58,0.7); margin-top:12px; text-align:center; font-family: 'Playfair Display', serif; }
+    .msg{ margin-top:12px;padding:10px;border-radius:10px;background:rgba(255,120,140,0.06); color:#8f2e4f; border:1px solid rgba(255,120,140,0.08); display:none; text-align:center; font-family:Merriweather, serif; }
+
+    .reveal{
+      margin-top:18px;padding:18px;border-radius:18px;
+      background: linear-gradient(180deg, rgba(255,248,240,0.72), rgba(255,245,240,0.6));
+      border:1px solid rgba(255,245,230,0.5);
+      min-height:110px; display:grid; align-items:center;
+      box-shadow: inset 0 0 18px rgba(210,150,40,0.06);
+    }
+
+    .secret{ font-family:'Playfair Display'; font-size:15px; line-height:1.35; color:var(--royal); white-space:pre-line; text-shadow: 0 1px 0 rgba(255,255,255,0.5); }
+
+    .editable{
+      background: linear-gradient(180deg,#fff8ef,#fff4ee); border:1px solid rgba(212,160,40,0.12); border-radius:12px; padding:8px 12px;
+      color:var(--royal); font-family:'Playfair Display'; font-size:15px; margin-top:10px; width:100%; max-width:300px; outline:none;
+      box-shadow: inset 0 6px 12px rgba(255,240,220,0.35);
+    }
+
+    .save-btn{
+      margin-top:10px; padding:8px 14px; border:none; border-radius:12px; cursor:pointer;
+      background: linear-gradient(180deg,#ffe5b9,#ffd37a);
+      color:#3a1d27; font-weight:700; width:100%; max-width:140px;
+      box-shadow: 0 8px 24px rgba(197,140,30,0.16);
+    }
+    .save-btn:hover{ transform:scale(1.03) }
+
+    .typing-caret{ border-right:3px solid rgba(212,160,40,0.95); padding-right:4px; }
+
+    @media(min-width:900px){
+      .stage{ padding:40px 32px; gap:48px }
+      h1{ font-size:44px }
+      .pwd-row{ flex-direction:row; gap:14px }
+      input[type="password"]{ flex:1 }
+      button.primary{ width:auto; padding:14px 28px }
+    }
+    @media (max-width:480px){ h1{ font-size:30px } }
+
+    /* small sparkle + animal accent elements */
+    .spark { position:absolute; pointer-events:none; z-index:6; filter: drop-shadow(0 8px 18px rgba(212,150,40,0.18)); border-radius:50%; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <canvas id="particles"></canvas>
+
+    <div class="hero">
+      <div class="brand">
+        <div class="logo">S</div>
+        <div style="text-align:left">
+          <div style="font-size:12px;color:rgba(90,32,58,0.6);font-family:Merriweather">PRIVATE ACCESS</div>
+          <div style="font-weight:700;font-size:13px;color:rgba(90,32,58,0.85);font-family:Cinzel, serif">WALLET</div>
+        </div>
+      </div>
+
+      <h1 id="title">Welcome to Sidham</h1>
+      <div class="glow-line" aria-hidden="true"></div>
+      <p class="lead" style="display:none"></p>
+    </div>
+
+    <div class="card-wrap">
+      <div class="card" role="form" aria-labelledby="title">
+        <h2>EMERGENCY LINE</h2>
+
+        <div class="pwd-row">
+          <input id="pwd" type="password" inputmode="numeric" placeholder="Enter password" aria-label="Password" />
+          <button id="submit" class="primary">Unlock</button>
+        </div>
+
+        <div class="hint">CREDENTIALS</div>
+        <div class="msg" id="msg">Incorrect password. Try again.</div>
+
+        <div class="reveal">
+          <div class="secret" id="secret" style="opacity:0;transform:translateY(8px);"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ---------- Firebase config (sidham) ----------
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSMypTNkkeH4hgtKIonNOccRC1-jRiRZg",
+      authDomain: "sidham-6d564.firebaseapp.com",
+      databaseURL: "https://sidham-6d564-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "sidham-6d564",
+      storageBucket: "sidham-6d564.firebasestorage.app",
+      messagingSenderId: "1002306011366",
+      appId: "1:1002306011366:web:ce0477d82ecb4baa697b27",
+      measurementId: "G-F981VH4MYM"
+    };
+    try { firebase.initializeApp(firebaseConfig); } catch (e) { /* already initialized? */ }
+    const db = firebase.database();
+    const dbRef = db.ref('passwordMessage');
+
+    // ---------- constants & elements (logic unchanged) ----------
+    const CORRECT = '0010';
+    const EMAIL_LINE = `SOS message is`; // as requested
+    const pwd = document.getElementById('pwd');
+    const btn = document.getElementById('submit');
+    const msg = document.getElementById('msg');
+    const secretEl = document.getElementById('secret');
+
+    function typeWriterEffect(text, element, delay = 40, callback) {
+      element.textContent = '';
+      element.classList.add('typing-caret');
+      let i = 0;
+      const step = () => {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          setTimeout(step, delay);
+        } else {
+          element.classList.remove('typing-caret');
+          if (callback) callback();
+        }
+      };
+      step();
+    }
+
+    // ---------- firebase helpers (use msg= key) ----------
+    async function fetchPValue() {
+      try {
+        const snap = await db.ref('passwordMessage/pValue').get();
+        if (snap && snap.exists()) {
+          return snap.val();
+        } else {
+          await db.ref('passwordMessage').set({ pValue: 'msg= Sidham', email: 'sidham@app' });
+          return 'msg= Sidham';
+        }
+      } catch (e) {
+        console.error('Firebase fetch error', e);
+        return 'msg= Sidham';
+      }
+    }
+
+    async function savePValue(value) {
+      try {
+        await db.ref('passwordMessage/pValue').set(value);
+        await db.ref('passwordMessage/email').set('sidham@app');
+        return true;
+      } catch (e) {
+        console.error('Firebase save error', e);
+        return false;
+      }
+    }
+
+    dbRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      if (!data) return;
+      window._remoteP = data.pValue || 'msg= Sidham';
+    });
+
+    // ---------- showSecret (typing + editable input) ----------
+    async function showSecret() {
+      msg.style.display = 'none';
+      gsap.to(secretEl, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' });
+
+      const pVal = await fetchPValue();
+      const line1 = EMAIL_LINE;
+      const line2 = pVal;
+
+      secretEl.textContent = '';
+      typeWriterEffect(line1, secretEl, 30, () => {
+        secretEl.appendChild(document.createElement('br'));
+        const line2El = document.createElement('span');
+        secretEl.appendChild(line2El);
+        typeWriterEffect(line2, line2El, 30, async () => {
+          secretEl.appendChild(document.createElement('br'));
+
+          const input = document.createElement('input');
+          input.className = 'editable';
+          input.id = 'editableP';
+          input.placeholder = 'Write your message'; // preserved
+          let justValue = line2;
+          if (justValue.startsWith('msg=')) justValue = justValue.replace(/^msg=\s*/, '');
+          input.value = justValue;
+
+          const br = document.createElement('br');
+          const saveBtn = document.createElement('button');
+          saveBtn.className = 'save-btn';
+          saveBtn.id = 'saveP';
+          saveBtn.textContent = 'Save';
+
+          secretEl.appendChild(input);
+          secretEl.appendChild(br);
+          secretEl.appendChild(saveBtn);
+
+          saveBtn.addEventListener('click', async () => {
+            const newValRaw = (document.getElementById('editableP').value || '').trim();
+            if (!newValRaw) {
+              alert('Please enter a valid value');
+              return;
+            }
+            const fullP = 'msg= ' + newValRaw;
+            const ok = await savePValue(fullP);
+            if (ok) {
+              gsap.fromTo(saveBtn, { scale: 0.98 }, { scale: 1.04, duration: 0.18, yoyo: true, repeat: 1 });
+              const spanAfter = secretEl.querySelector('span');
+              if (spanAfter) spanAfter.textContent = fullP;
+              spawnRoyalSparkles();
+              alert('BINGO ✅.');
+            } else {
+              alert('Failed saving to server.');
+            }
+          });
+        });
+      });
+    }
+
+    function showError() {
+      msg.style.display = 'block';
+      msg.style.opacity = 0;
+      gsap.to(msg, { opacity: 1, y: -2, duration: 0.45, ease: 'power2.out' });
+    }
+
+    btn.addEventListener('click', () => {
+      const v = pwd.value.trim();
+      if (!v) { pwd.focus(); return; }
+      if (v === CORRECT) { showSecret(); }
+      else { showError(); }
+    });
+    pwd.addEventListener('keydown', (e) => { if (e.key === 'Enter') btn.click(); });
+
+    // ---------- Royal animal particle system (canvas) ----------
+    (function () {
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+      let W = canvas.width = innerWidth;
+      let H = canvas.height = innerHeight;
+      const animals = [];
+      const palette = {
+        gold: ['#f7d67b','#d4a017','#fff6d4'],
+        maroon: ['#5a203a','#7a2e52']
+      };
+      function rand(min, max) { return Math.random() * (max - min) + min; }
+
+      // simplified stylized elephant shape (rounded body + trunk) and peacock (fan tail)
+      function drawElephant(x, y, s, rot, fill) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rot);
+        ctx.scale(s, s);
+        // body
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 28, 20, 0, 0, Math.PI*2);
+        ctx.fillStyle = fill;
+        ctx.fill();
+        // head
+        ctx.beginPath();
+        ctx.arc(36, -6, 12, 0, Math.PI*2);
+        ctx.fill();
+        // trunk
+        ctx.beginPath();
+        ctx.moveTo(44, -2);
+        ctx.quadraticCurveTo(56, 6, 52, 14);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = fill;
+        ctx.stroke();
+        // ear
+        ctx.beginPath();
+        ctx.moveTo(24, -12);
+        ctx.quadraticCurveTo(10, -28, 2, -12);
+        ctx.fillStyle = '#fff7e6';
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawPeacock(x, y, s, rot, fill) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rot);
+        ctx.scale(s, s);
+        // body
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 10, 14, 0, 0, Math.PI*2);
+        ctx.fillStyle = fill;
+        ctx.fill();
+        // neck + head
+        ctx.beginPath();
+        ctx.moveTo(6, -10);
+        ctx.quadraticCurveTo(12, -22, 0, -26);
+        ctx.strokeStyle = fill;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(0, -28, 4, 0, Math.PI*2);
+        ctx.fill();
+        // tail fan
+        for (let i = -5; i <= 5; i++) {
+          ctx.beginPath();
+          ctx.moveTo(-4, 4);
+          ctx.quadraticCurveTo(-32 + i*6, -10 + i*4, -8 - i*2, -24 + i*2);
+          ctx.strokeStyle = 'rgba(255,235,180,0.9)';
+          ctx.lineWidth = 1.6;
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function init() {
+        animals.length = 0;
+        const count = Math.round((W * H) / 90000) + 12;
+        for (let i = 0; i < count; i++) {
+          const type = i % 2 === 0 ? 'elephant' : 'peacock';
+          animals.push({
+            type,
+            x: rand(-W * 0.2, W * 1.2),
+            y: rand(-H * 0.5, H * 1.2),
+            vx: rand(-0.9, 0.9),
+            vy: rand(0.4, 1.6),
+            s: rand(0.6, 1.6),
+            rot: rand(-0.6, 0.6),
+            drot: rand(-0.02, 0.02),
+            fill: palette.gold[Math.floor(rand(0, palette.gold.length))]
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        // faint golden sheen
+        ctx.fillStyle = 'rgba(250,240,230,0.02)';
+        ctx.fillRect(0, 0, W, H);
+
+        for (const a of animals) {
+          if (a.type === 'elephant') drawElephant(a.x, a.y, a.s, a.rot, a.fill);
+          else drawPeacock(a.x, a.y, a.s, a.rot, a.fill);
+
+          a.x += a.vx;
+          a.y += a.vy;
+          a.rot += a.drot;
+
+          if (a.y > H + 120) { a.y = -80; a.x = rand(-W * 0.1, W * 1.1); }
+          if (a.x < -160) a.x = W + 160;
+          if (a.x > W + 160) a.x = -160;
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', () => { W = canvas.width = innerWidth; H = canvas.height = innerHeight; init(); });
+      init(); draw();
+
+      // royal sparkles on save
+      function spawnRoyalSparkles() {
+        const ccount = 10;
+        for (let i = 0; i < ccount; i++) {
+          const el = document.createElement('div');
+          el.className = 'spark';
+          const size = Math.round(rand(8, 26));
+          el.style.width = el.style.height = size + 'px';
+          el.style.left = (window.innerWidth / 2 + rand(-120, 120)) + 'px';
+          el.style.top = (window.innerHeight / 2 + rand(-60, 60)) + 'px';
+          el.style.background = `radial-gradient(circle at 30% 30%, rgba(255,250,230,0.95), rgba(212,160,40,0.95) 40%, transparent 60%)`;
+          el.style.opacity = '0.98';
+          el.style.borderRadius = '50%';
+          document.body.appendChild(el);
+          gsap.to(el, { y: rand(-140, -320), x: rand(-180, 180), scale: 1.1, opacity: 0, duration: 0.9 + Math.random() * 0.6, ease: 'power3.out', onComplete() { el.remove(); } });
+        }
+      }
+
+      window.spawnRoyalSparkles = spawnRoyalSparkles;
+    })();
+
+    // micro-entrances (more load)
+    gsap.from('.logo', { y: 28, opacity: 0, duration: 1.1, ease: 'power4.out' });
+    gsap.from('#title', { y: 22, opacity: 0, duration: 1.2, delay: 0.08, ease: 'power4.out' });
+    gsap.from('.card', { y: 30, opacity: 0, duration: 1.3, delay: 0.18, ease: 'power4.out' });
+
+    // focus
+    pwd.focus();
+  </script>
+</body>
+</html>
