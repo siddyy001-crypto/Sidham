@@ -216,7 +216,7 @@
 
     // ---------- constants & elements (logic unchanged) ----------
     const CORRECT = '0010';
-    const EMAIL_LINE = `SOS message is`; // as requested
+    const EMAIL_LINE = `⚜️`; // as requested
     const pwd = document.getElementById('pwd');
     const btn = document.getElementById('submit');
     const msg = document.getElementById('msg');
@@ -292,10 +292,9 @@
           const input = document.createElement('input');
           input.className = 'editable';
           input.id = 'editableP';
-          input.placeholder = 'Write your message'; // preserved
-          let justValue = line2;
-          if (justValue.startsWith('msg=')) justValue = justValue.replace(/^msg=\s*/, '');
-          input.value = justValue;
+          input.placeholder = 'Write your msg here';
+          input.value = ''; // always empty — only shows placeholder
+
 
           const br = document.createElement('br');
           const saveBtn = document.createElement('button');
