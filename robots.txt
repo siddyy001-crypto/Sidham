@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://siddyy001-crypto.github.io/Sidham/sitemap.xml
