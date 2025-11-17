@@ -300,7 +300,7 @@
         <h2>EMERGENCY LINE</h2>
 
         <div class="pwd-row">
-          <input id="pwd" type="password" inputmode="text" placeholder="Enter Password" aria-label="Password" />
+          <input id="pwd" type="password" inputmode="text" placeholder="Enter Contact No." aria-label="Password" />
           <button id="submit" class="primary">Go Ahead</button>
         </div>
 
@@ -308,14 +308,14 @@
           SOS
           <div class="status-dots" id="status-dots-container">
             <div class="status-item">
-              <span class="dot" id="dot-sid"></span> SAM
+              <span class="dot" id="dot-sid"></span> BEBAAA
             </div>
             <div class="status-item">
               <span class="dot" id="dot-samaira"></span> SID
             </div>
           </div>
         </div>
-        <div class="msg" id="msg">Incorrect Password. Try again.</div>
+        <div class="msg" id="msg">Enter correct Contact No. Try again.</div>
 
         <div class="reveal">
           <div class="secret" id="secret" style="opacity:0;transform:translateY(8px); width:100%;"></div>
@@ -563,7 +563,7 @@
 
     // --- UPDATED showError function ---
     function showError(errorMessage) {
-      msg.textContent = errorMessage || 'Incorrect Password. Try again.'; // Show specific Firebase errors
+      msg.textContent = errorMessage || 'Enter correct Contact No. Try again.'; // Show specific Firebase errors
       msg.style.display = 'block';
       statusDotsContainer.style.display = 'flex'; // Show dots
       
@@ -640,9 +640,9 @@
         .catch((error) => {
           // --- LOGIN FAILED ---
           console.error("Login Error:", error.message);
-          let friendlyError = 'Incorrect Password. Try again.';
+          let friendlyError = 'Enter correct Contact No. Try again.';
           if (error.code === 'auth/wrong-password') {
-            friendlyError = 'Incorrect Password. Try again.';
+            friendlyError = 'Enter correct Contact No. Try again.';
           } else if (error.code === 'auth/user-not-found') {
             friendlyError = 'User not found. Check Firebase setup.';
           }
