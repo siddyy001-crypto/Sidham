@@ -13,8 +13,6 @@
 
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-
   <style>
     :root{
       /* royal gold + deep maroon palette */
@@ -116,7 +114,7 @@
     /* Felt/embroidered input row */
     .pwd-row{ 
       display:flex; gap:14px; align-items:center; 
-      flex-direction:row; /* <<< CHANGED */
+      flex-direction:row; 
       margin-top:6px; 
     }
     
@@ -128,20 +126,18 @@
     /* UPDATED: Stitched/Embroidery effect */
     input[type="password"]{
       width:100%; 
-      flex: 1; /* <<< ADDED */
+      flex: 1; 
       padding:14px 18px; border-radius:22px; 
       background:
         repeating-linear-gradient(135deg, rgba(255,250,245,0.95) 0 6px, rgba(255,245,240,0.95) 6px 12px),
         linear-gradient(180deg,#fff7f6,#fff1ef);
       color:var(--royal); font-size:16px; outline:none;
-      box-shadow: inset 0 8px 18px rgba(212,160,40,0.1), 0 1px 0 rgba(255,255,255,0.5); /* Soften shadow */
+      box-shadow: inset 0 8px 18px rgba(212,160,40,0.1), 0 1px 0 rgba(255,255,255,0.5); 
       font-family: 'Playfair Display', serif;
       border: var(--embroidery-stitch);
-      /* NEW: Animation */
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.5s ease; /* Added opacity */
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.5s ease;
     }
     
-    /* NEW: Animation */
     input[type="password"]:focus {
       transform: scale(1.02);
       border-color: rgba(212,160,40,0.5);
@@ -149,9 +145,8 @@
     }
 
 
-    /* Hefty luxurious embroidered button */
     button.primary{
-      width:auto; /* <<< CHANGED */
+      width:auto;
       padding:14px 18px; border-radius:22px; cursor:pointer;
       font-family:Cinzel, 'Playfair Display', serif; font-weight:700; letter-spacing:0.6px; text-transform:uppercase;
       background: linear-gradient(180deg, #f6d68a 0%, #d7a61b 60%, #c58f12 100%);
@@ -160,22 +155,20 @@
         inset 0 6px 14px rgba(255,255,255,0.6),
         0 10px 30px rgba(197,140,30,0.18),
         0 2px 0 rgba(0,0,0,0.08);
-      border: 2px dotted rgba(255, 255, 255, 0.6); /* Stitched */
+      border: 2px dotted rgba(255, 255, 255, 0.6); 
       transition: transform 0.18s ease, box-shadow 0.18s ease;
-      /* margin-top: 14px; removed */
     }
     button.primary:active{ transform: translateY(1px) scale(0.995); box-shadow: 0 6px 18px rgba(197,140,30,0.16); }
     button.primary:hover{ transform: translateY(-4px); box-shadow: 0 18px 40px rgba(197,140,30,0.22); }
 
     .hint{ 
         font-size:13px; color:rgba(90,32,58,0.7); margin-top:12px; text-align:center; font-family: 'Playfair Display', serif; 
-        display: flex; /* Make it a flex container */
-        flex-direction: column; /* Stack items vertically */
-        align-items: center; /* Center items horizontally */
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
     }
     .msg{ margin-top:12px;padding:10px;border-radius:10px;background:rgba(255,120,140,0.06); color:#8f2e4f; border:1px solid rgba(255,120,140,0.08); display:none; text-align:center; font-family:Merriweather, serif; }
 
-    /* UPDATED: Glassier reveal box */
     .reveal{
       margin-top:18px;padding:18px;border-radius:18px;
       background: linear-gradient(180deg, rgba(255,248,240,0.85), rgba(255,245,240,0.7));
@@ -197,7 +190,6 @@
       text-shadow: 0 2px 0 rgba(0,0,0,0.04);
     }
 
-    /* --- STYLES FOR DOTS --- */
     .status-dots {
         display: flex; gap: 20px; margin-top: 8px; font-family: 'Playfair Display', serif;
         font-size: 14px; color: var(--royal); transition: opacity 0.3s ease;
@@ -220,10 +212,9 @@
       border-radius:12px; padding:8px 12px;
       color:var(--royal); font-family:'Playfair Display'; font-size:15px; outline:none;
       box-shadow: inset 0 6px 12px rgba(255,240,220,0.35);
-      width: 100%; /* <<< CHANGED */
+      width: 100%;
     }
 
-    /* UPDATED: Stitched Send button */
     .save-btn{
       padding:8px 14px; border-radius:12px; cursor:pointer;
       background: linear-gradient(180deg,#ffe5b9,#ffd37a);
@@ -231,50 +222,42 @@
       box-shadow: 0 8px 24px rgba(197,140,30,0.16);
       font-family: Cinzel, serif;
       text-transform: uppercase; letter-spacing: 0.5px;
-      border: 2px dashed rgba(197,140,30,0.5); /* Stitched */
-      width: auto; /* <<< CHANGED */
+      border: 2px dashed rgba(197,140,30,0.5); 
+      width: auto;
     }
     .save-btn:hover{ transform:scale(1.03) }
     
-    /* NEW: Input row for message sections */
     .input-row {
       display: flex;
-      flex-direction: row; /* <<< CHANGED */
+      flex-direction: row; 
       gap: 10px;
       align-items: center;
       margin-top: 10px;
       width: 100%;
-      max-width: 420px; /* Constrain width */
+      max-width: 420px; 
       margin-left: auto;
       margin-right: auto;
     }
     .input-row .editable {
       width: 100%;
-      flex: 1; /* <<< ADDED */
+      flex: 1; 
       margin-top: 0;
     }
     .input-row .save-btn {
-      width: auto; /* <<< CHANGED */
+      width: auto; 
       margin-top: 0;
     }
-    /* --- End Input Row --- */
 
     .typing-caret{ border-right:3px solid rgba(212,160,40,0.95); padding-right:4px; }
 
     @media(min-width:900px){
       .stage{ padding:40px 32px; gap:48px }
       h1{ font-size:44px }
-      /* pwd-row and input are now default, so only padding override is needed */
       button.primary{ padding:14px 28px }
-      
-      /* Only padding override is needed */
-      .input-row .save-btn {
-        padding: 8px 20px;
-      }
+      .input-row .save-btn { padding: 8px 20px; }
     }
     @media (max-width:480px){ 
       h1{ font-size:30px }
-      /* On very small screens, make "Go Ahead" less wide */
       button.primary { padding-left: 14px; padding-right: 14px; }
     }
 
@@ -300,7 +283,7 @@
         <h2>EMERGENCY LINE</h2>
 
         <div class="pwd-row">
-          <input id="pwd" type="password" inputmode="text" placeholder="Enter Contact No." aria-label="Password" />
+          <input id="pwd" type="password" inputmode="numeric" placeholder="Enter Contact Number" aria-label="Password" />
           <button id="submit" class="primary">Go Ahead</button>
         </div>
 
@@ -308,14 +291,14 @@
           SOS
           <div class="status-dots" id="status-dots-container">
             <div class="status-item">
-              <span class="dot" id="dot-sid"></span> BEBAAA
+              <span class="dot" id="dot-sid"></span> SID
             </div>
             <div class="status-item">
-              <span class="dot" id="dot-samaira"></span> SID
+              <span class="dot" id="dot-samaira"></span> BEBAAA
             </div>
           </div>
         </div>
-        <div class="msg" id="msg">Enter correct Contact No. Try again.</div>
+        <div class="msg" id="msg">Incorrect Contact Number. Try again.</div>
 
         <div class="reveal">
           <div class="secret" id="secret" style="opacity:0;transform:translateY(8px); width:100%;"></div>
@@ -342,23 +325,19 @@
     } catch (e) { /* already initialized? */ }
     
     const db = firebase.database();
-    const auth = firebase.auth(); // NEW: Get auth service
     const dbRef = db.ref('passwordMessage');
 
     // ---------- constants & elements ----------
-    // NEW: This is the shared email you created in Firebase
-    const SHARED_EMAIL = 'shonsk0010@gmail.com'; // <<< *** THIS IS THE FIX ***
-    
-    // REMOVED: const CORRECT = '0010'; // This is no longer needed!
+    const CORRECT = '0010'; 
     
     const pwd = document.getElementById('pwd');
     const btn = document.getElementById('submit');
     const msg = document.getElementById('msg');
     const secretEl = document.getElementById('secret');
-    const pwdRow = document.querySelector('.pwd-row'); // Get the password row container
+    const pwdRow = document.querySelector('.pwd-row'); 
 
-    const dotSid = document.getElementById('dot-sid');
-    const dotSamaira = document.getElementById('dot-samaira');
+    const dotSid = document.getElementById('dot-sid'); // This is SAM's dot
+    const dotSamaira = document.getElementById('dot-samaira'); // This is SID's dot
     const statusDotsContainer = document.getElementById('status-dots-container');
 
     function typeWriterEffect(text, element, delay = 40, callback) {
@@ -426,22 +405,21 @@
     }
 
     // --- Realtime Listener (for dots) ---
-    // UPDATED: This listener will now *only* work if you are NOT logged in
-    auth.onAuthStateChanged(user => {
-      if (!user) {
-        // Not logged in, check for dots
-        dbRef.on('value', (snapshot) => {
-          const data = snapshot.val();
-          if (!data) return;
-          const sidData = data.sid || {};
-          if (sidData.status === 'unread') { dotSid.classList.add('green'); } 
-          else { dotSid.classList.remove('green'); }
-          
-          const samairaData = data.samaira || {};
-          if (samairaData.status === 'unread') { dotSamaira.classList.add('green'); } 
-          else { dotSamaira.classList.remove('green'); }
-        });
-      }
+    dbRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      if (!data) return;
+      
+      // --- *** THIS IS THE FIX *** ---
+      // SID's dot (id="dot-samaira") checks SID's status (sidData.status)
+      const sidData = data.sid || {};
+      if (sidData.status === 'unread') { dotSamaira.classList.add('green'); } 
+      else { dotSamaira.classList.remove('green'); }
+      
+      // SAM's (BEBAAA's) dot (id="dot-sid") checks SAMAIRA's status (samairaData.status)
+      const samairaData = data.samaira || {};
+      if (samairaData.status === 'unread') { dotSid.classList.add('green'); } 
+      else { dotSid.classList.remove('green'); }
+      // --- *** END OF FIX *** ---
     });
 
     // ---------- REBUILT showSecret function ----------
@@ -563,7 +541,7 @@
 
     // --- UPDATED showError function ---
     function showError(errorMessage) {
-      msg.textContent = errorMessage || 'Enter correct Contact No. Try again.'; // Show specific Firebase errors
+      msg.textContent = errorMessage || 'Incorrect Contact Number. Try again.';
       msg.style.display = 'block';
       statusDotsContainer.style.display = 'flex'; // Show dots
       
@@ -576,80 +554,54 @@
       gsap.to(msg, { opacity: 1, y: -2, duration: 0.45, ease: 'power2.out' });
     }
 
-    // --- *** COMPLETELY NEW Button Click Listener *** ---
+    // --- *** BACK TO SIMPLe Button Click Listener *** ---
     btn.addEventListener('click', () => {
       // Check current state by button text
       if (btn.textContent === 'Lock') {
-          // --- LOCK THE PAGE (Sign Out) ---
+          // --- LOCK THE PAGE ---
           
-          // NEW: Sign out from Firebase
-          auth.signOut();
-          
-          // 1. Hide secret section smoothly
           gsap.to(secretEl, { opacity: 0, y: 8, duration: 0.5, ease: 'power3.in', onComplete: () => {
               secretEl.innerHTML = ''; // Clear the content
               secretEl.style.opacity = 0; // Reset for next time
               secretEl.style.transform = 'translateY(8px)';
           }});
           
-          // 2. Show password input (it was hidden)
-          pwd.style.display = 'block'; // or 'inline-block'
+          // Show password input (it was hidden)
+          pwd.style.display = 'block'; 
           gsap.to(pwd, { opacity: 1, duration: 0.5 });
-          pwdRow.classList.remove('unlocked'); // Remove centered class
+          pwdRow.classList.remove('unlocked'); 
           
-          // 3. Show dots
+          // Show dots
           statusDotsContainer.style.display = 'flex';
           gsap.to(statusDotsContainer, { opacity: 1, duration: 0.5 });
           
-          // 4. Reset password field and focus
           pwd.value = '';
           pwd.focus();
-          
-          // 5. Change button text back
           btn.textContent = 'Go Ahead';
-          
-          // 6. Hide any error messages
           msg.style.display = 'none';
           
           return; // Stop
       }
       
-      // --- GO AHEAD (Sign In) LOGIC ---
-      const password = pwd.value.trim();
-      if (!password) { pwd.focus(); return; }
+      // --- GO AHEAD (UNLOCK) LOGIC ---
+      const v = pwd.value.trim();
+      if (!v) { pwd.focus(); return; }
       
-      // Show loading state
-      btn.textContent = 'Checking...';
-      
-      auth.signInWithEmailAndPassword(SHARED_EMAIL, password)
-        .then((userCredential) => {
-          // --- LOGIN SUCCESS ---
+      if (v === CORRECT) { 
           showSecret(); // This shows the secret area
           
-          // 1. Change button text
           btn.textContent = 'Lock';
           
-          // 2. Hide password input ONLY
+          // Hide password input ONLY
           gsap.to(pwd, { opacity: 0, duration: 0.5, onComplete: () => {
               pwd.style.display = 'none';
           }});
           
-          // 3. Center the lock button
           pwdRow.classList.add('unlocked');
-        })
-        .catch((error) => {
-          // --- LOGIN FAILED ---
-          console.error("Login Error:", error.message);
-          let friendlyError = 'Enter correct Contact No. Try again.';
-          if (error.code === 'auth/wrong-password') {
-            friendlyError = 'Enter correct Contact No. Try again.';
-          } else if (error.code === 'auth/user-not-found') {
-            friendlyError = 'User not found. Check Firebase setup.';
-          }
-          
-          showError(friendlyError);
-          btn.textContent = 'Go Ahead'; // Reset button text
-        });
+      }
+      else { 
+          showError(); 
+      }
     });
     
     // --- UPDATED Keydown Listener ---
