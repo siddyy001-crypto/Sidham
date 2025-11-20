@@ -48,11 +48,19 @@
     *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
     
     html,body{
-      height:100%; margin:0; font-family:Merriweather, 'Playfair Display', Cinzel, serif;
+      /* UPDATED: Use min-height 100dvh for full mobile screen support */
+      min-height: 100dvh; 
+      margin:0; font-family:Merriweather, 'Playfair Display', Cinzel, serif;
       background: radial-gradient(900px 420px at 8% 8%, rgba(243,207,86,0.15), transparent),
                   radial-gradient(700px 360px at 92% 92%, rgba(212,160,40,0.1), transparent),
                   linear-gradient(180deg,var(--bg1),var(--bg2));
-      color:var(--royal); -webkit-font-smoothing:antialiased; overflow:hidden; user-select: none;
+      color:var(--royal); -webkit-font-smoothing:antialiased; 
+      
+      /* UPDATED: Allowed vertical scrolling, hid horizontal */
+      overflow-x: hidden; 
+      overflow-y: auto; 
+      
+      user-select: none;
     }
 
     #bg-fx { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
@@ -69,7 +77,14 @@
     .rose-shape::before { content:''; position:absolute; width:100%; height:100%; border-radius:50%; background: inherit; transform: rotate(45deg); }
     .rose-shape::after { content:''; position:absolute; top: 15%; left: 15%; width:70%; height:70%; border-radius:50%; border: 2px solid rgba(255,255,255,0.1); background: radial-gradient(circle, #B22222, #800000); }
 
-    .stage{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:28px 18px; gap:34px; position:relative; text-align:center; max-width:780px; margin:0 auto; z-index: 3; }
+    .stage{ 
+      /* UPDATED: min-height 100dvh and padding-bottom for safe area */
+      min-height: 100dvh; 
+      display:flex; flex-direction:column; justify-content:center; align-items:center; 
+      padding:28px 18px; gap:34px; position:relative; text-align:center; 
+      max-width:780px; margin:0 auto; z-index: 3; 
+      padding-bottom: 120px; /* Prevents bottom content from being hidden by address bar */
+    }
     .hero{ z-index:3; padding:10px 0; width:100%; display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px; }
     
     /* --- LOGO (Breathing) --- */
