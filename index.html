@@ -3,13 +3,28 @@
 <head>
   <meta name="google-site-verification" content="DBIPJgObjkOc9jcd_K0Yk9TQQiy_JM_smX6U6G_6Mf4" />
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#fff6f2">
+
+  <meta name="description" content="Sidham Emergency Line: A private, secure, and encrypted communication portal for authorized access only.">
+  <meta name="author" content="Sidham">
+  
+  <meta property="og:title" content="Sidham — Emergency Line">
+  <meta property="og:description" content="A private, secure, and encrypted communication portal.">
+  <meta property="og:type" content="website">
+
   <title>Sidham — Emergency Line</title>
+
+  <link rel="icon" type="image/png" href="favicon.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Playfair+Display:wght@400;600;700;900&family=Merriweather:wght@300;700&display=swap" rel="stylesheet">
+  
   <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.12.2/dist/TextPlugin.min.js"></script>
 
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
@@ -21,271 +36,155 @@
       --brown-dark: #4A2C2A; --brown-light: #5a3c3a;
       
       /* --- ULTRA "iOS 26" GLASS SETTINGS --- */
-      /* 96% Transparency (0.04) */
+      /* 96% Transparency */
       --glass-bg: rgba(255, 255, 255, 0.04); 
-      
-      /* Blur + High Saturation for Refractive Glow */
+      /* High Blur + Saturation for "Refractive" look */
       --glass-filter: blur(25px) saturate(200%);
-      
-      /* Crisp Border */
       --glass-border: 1px solid rgba(255, 255, 255, 0.5);
-      
-      /* Subtle shadow */
       --glass-shadow: 0 20px 50px rgba(90,32,58,0.1), inset 0 0 0 1px rgba(255,255,255,0.15);
-      
       --embroidery-stitch: 2px dotted rgba(212,160,40,0.5);
     }
 
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+    
     html,body{
-      height:100%;margin:0;font-family:Merriweather, 'Playfair Display', Cinzel, serif;
+      height:100%; margin:0; font-family:Merriweather, 'Playfair Display', Cinzel, serif;
       background: radial-gradient(900px 420px at 8% 8%, rgba(243,207,86,0.15), transparent),
                   radial-gradient(700px 360px at 92% 92%, rgba(212,160,40,0.1), transparent),
                   linear-gradient(180deg,var(--bg1),var(--bg2));
-      color:var(--royal); -webkit-font-smoothing:antialiased; overflow-x:hidden; position: relative;
+      color:var(--royal); -webkit-font-smoothing:antialiased; overflow:hidden; user-select: none;
     }
 
-    /* --- FLOATING ASSETS CSS --- */
     #bg-fx { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
     .float-item { position: absolute; opacity: 0; will-change: transform, opacity; }
 
-    /* 1. Golden Confetti (Scaled up 20%) */
+    /* --- PARTICLES (20% LARGER) --- */
     .confetti { width: 10px; height: 17px; background: linear-gradient(135deg, var(--gold-2), var(--gold-1)); border-radius: 2px; }
+    .leaf { width: 29px; height: 29px; background: #2d5a27; clip-path: polygon(50% 0%, 80% 10%, 100% 35%, 80% 60%, 50% 100%, 20% 60%, 0% 35%, 20% 10%); box-shadow: inset 2px 2px 0 rgba(255,255,255,0.2); }
+    .sparkle-shape { width: 22px; height: 22px; background: radial-gradient(circle, #fff 10%, var(--gold-1) 60%, transparent 70%); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); filter: drop-shadow(0 0 10px var(--gold-2)); }
+    .lion-face { width: 48px; height: 48px; -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C9 2 7 3.5 7 5C7 6 8 7 8 8C6 8 4 9 4 11C4 13 5 15 7 16V19C7 20.5 8.5 22 12 22C15.5 22 17 20.5 17 19V16C19 15 20 13 20 11C20 9 18 8 16 8C16 7 17 6 17 5C17 3.5 15 2 12 2ZM9 11C9 10.4 9.4 10 10 10C10.6 10 11 10.4 11 11C11 11.6 10.6 12 10 12C9.4 12 9 11.6 9 11ZM14 10C14.6 10 15 10.4 15 11C15 11.6 14.6 12 14 12C13.4 12 13 11.6 13 11C13 10.4 13.4 10 14 10Z" /></svg>') no-repeat center / contain; background: linear-gradient(180deg, #d4a017, #f3cf56); }
+    .gem-shape { width: 24px; height: 29px; background: linear-gradient(135deg, #fffcf0, #ffd700); clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); box-shadow: 0 0 18px rgba(255, 215, 0, 0.8); }
+    /* CSS Rose */
+    .rose-shape { width: 32px; height: 32px; position: relative; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #8B0000, #400000); box-shadow: 0 0 10px rgba(139, 0, 0, 0.6); }
+    .rose-shape::before { content:''; position:absolute; width:100%; height:100%; border-radius:50%; background: inherit; transform: rotate(45deg); }
+    .rose-shape::after { content:''; position:absolute; top: 15%; left: 15%; width:70%; height:70%; border-radius:50%; border: 2px solid rgba(255,255,255,0.1); background: radial-gradient(circle, #B22222, #800000); }
 
-    /* 2. Dark Green Fancy Leaf (Scaled up 20%) */
-    .leaf {
-      width: 29px; height: 29px; background: #2d5a27;
-      clip-path: polygon(50% 0%, 80% 10%, 100% 35%, 80% 60%, 50% 100%, 20% 60%, 0% 35%, 20% 10%);
-      box-shadow: inset 2px 2px 0 rgba(255,255,255,0.2);
-    }
-
-    /* 3. Golden Sparkles (Scaled up 20%) */
-    .sparkle-shape {
-      width: 22px; height: 22px;
-      background: radial-gradient(circle, #fff 10%, var(--gold-1) 60%, transparent 70%);
-      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-      filter: drop-shadow(0 0 10px var(--gold-2));
-    }
-
-    /* 4. Royal Lion Face (Scaled up 20%) */
-    .lion-face {
-      width: 48px; height: 48px;
-      -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C9 2 7 3.5 7 5C7 6 8 7 8 8C6 8 4 9 4 11C4 13 5 15 7 16V19C7 20.5 8.5 22 12 22C15.5 22 17 20.5 17 19V16C19 15 20 13 20 11C20 9 18 8 16 8C16 7 17 6 17 5C17 3.5 15 2 12 2ZM9 11C9 10.4 9.4 10 10 10C10.6 10 11 10.4 11 11C11 11.6 10.6 12 10 12C9.4 12 9 11.6 9 11ZM14 10C14.6 10 15 10.4 15 11C15 11.6 14.6 12 14 12C13.4 12 13 11.6 13 11C13 10.4 13.4 10 14 10Z" /></svg>') no-repeat center / contain;
-      background: linear-gradient(180deg, #d4a017, #f3cf56);
-    }
-
-    /* 5. Royal Gem (Scaled up 20%) */
-    .gem-shape {
-      width: 24px; height: 29px;
-      background: linear-gradient(135deg, #fffcf0, #ffd700);
-      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); 
-      box-shadow: 0 0 18px rgba(255, 215, 0, 0.8);
-    }
-
-    /* 6. Dark Red Rose (CSS Only) */
-    .rose-shape {
-        width: 32px; height: 32px;
-        position: relative;
-        border-radius: 50%;
-        background: radial-gradient(circle at 30% 30%, #8B0000, #400000);
-        box-shadow: 0 0 10px rgba(139, 0, 0, 0.6);
-    }
-    .rose-shape::before {
-        content:''; position:absolute; 
-        width:100%; height:100%; border-radius:50%;
-        background: inherit; 
-        transform: rotate(45deg);
-    }
-    .rose-shape::after {
-        content:''; position:absolute; top: 15%; left: 15%;
-        width:70%; height:70%; border-radius:50%;
-        border: 2px solid rgba(255,255,255,0.1);
-        background: radial-gradient(circle, #B22222, #800000);
-    }
-
-    /* --- LAYOUT --- */
     .stage{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:28px 18px; gap:34px; position:relative; text-align:center; max-width:780px; margin:0 auto; z-index: 3; }
-    .hero{ z-index:3; padding:10px 0; width:100%; display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px }
+    .hero{ z-index:3; padding:10px 0; width:100%; display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px; }
     
-    /* --- LOGO WITH ULTRA GLASS --- */
+    /* --- LOGO (Breathing) --- */
     .logo{
       padding: 18px 28px; border-radius:20px; 
-      background: var(--glass-bg);
-      backdrop-filter: var(--glass-filter);
-      -webkit-backdrop-filter: var(--glass-filter);
+      background: var(--glass-bg); backdrop-filter: var(--glass-filter); -webkit-backdrop-filter: var(--glass-filter);
       border: var(--glass-border);
       background-image: linear-gradient(145deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.05) 45%, transparent 100%);
       box-shadow: 0 0 50px rgba(212, 160, 40, 0.4), var(--glass-shadow);
       font-family:Cinzel, serif; font-size: 28px; font-weight: 900; color: var(--gold-1);
       text-shadow: 0 2px 5px rgba(90,32,58,0.15);
+      animation: breathe 4s infinite ease-in-out;
     }
+    @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); box-shadow: 0 0 60px rgba(212, 160, 40, 0.6), var(--glass-shadow); } }
     
     h1{ font-family:Cinzel, 'Playfair Display', serif; font-weight:700; font-size:36px; margin:6px 0 0; color:var(--royal); text-shadow: 0 0 30px rgba(212, 160, 40, 0.8), 0 6px 18px rgba(212,150,60,0.08); }
     .glow-line{ height:4px; width:160px; border-radius:40px; background: linear-gradient(90deg, rgba(212,160,40,0.95), rgba(243,207,86,0.85)); box-shadow: 0 6px 30px rgba(243,207,86,0.12); margin:8px auto 0; }
 
-    /* --- MAIN CARD (96% Transparent) --- */
+    /* --- MAIN CARD (Static) --- */
     .card{ 
-        width:100%; max-width:640px; 
-        border-radius:30px; padding:30px; 
-        position:relative; overflow:visible; 
-        transition: box-shadow 0.8s ease;
-
-        background: var(--glass-bg);
-        backdrop-filter: var(--glass-filter);
-        -webkit-backdrop-filter: var(--glass-filter);
-        border: var(--glass-border);
-        box-shadow: var(--glass-shadow);
+        width:100%; max-width:640px; border-radius:30px; padding:30px; 
+        position:relative; overflow:visible; transition: box-shadow 0.8s ease;
+        background: var(--glass-bg); backdrop-filter: var(--glass-filter); -webkit-backdrop-filter: var(--glass-filter);
+        border: var(--glass-border); box-shadow: var(--glass-shadow);
         background-image: linear-gradient(145deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.05) 45%, transparent 100%);
-
-        /* Default Border (Locked State) */
+        
+        /* Locked Border */
         border: 3px double #8B4513; 
         box-shadow: 0 0 0 2px #d4a017, inset 0 0 20px rgba(212,160,40,0.1), var(--glass-shadow);
     }
-
-    /* --- UNLOCKED CARD GLOW --- */
-    .card.unlocked-glow {
-        box-shadow: 0 0 80px rgba(212, 160, 40, 0.3), var(--glass-shadow);
-    }
+    .card.unlocked-glow { box-shadow: 0 0 80px rgba(212, 160, 40, 0.3), var(--glass-shadow); }
     
-    /* --- ROYAL BORDER SKIN (Frame Logic) --- */
-    .royal-border-skin {
-        border: 3px double #8B4513 !important; 
-        box-shadow: 0 0 0 2px #d4a017, inset 0 0 20px rgba(212,160,40,0.1) !important;
-        position: relative;
-    }
-    
-    /* Crown Icon Logic */
+    /* --- ROYAL BORDER CLASSES --- */
+    .royal-border-skin { border: 3px double #8B4513 !important; box-shadow: 0 0 0 2px #d4a017, inset 0 0 20px rgba(212,160,40,0.1) !important; position: relative; }
     .royal-border-skin.has-crown::before {
-       content: "♛"; 
-       position: absolute; 
-       top: -18px; left: 50%; transform: translateX(-50%);
-       font-size: 24px; color: #d4a017; 
-       background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(5px);
-       padding: 0 10px; z-index: 10; border-radius: 10px;
+       content: "♛"; position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+       font-size: 24px; color: #d4a017; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(5px); padding: 0 10px; z-index: 10; border-radius: 10px;
     }
-    
-    #top-section.royal-border-skin {
-        border-radius: 22px; padding: 20px; margin-bottom: 20px;
-    }
-
+    #top-section.royal-border-skin { border-radius: 22px; padding: 20px; margin-bottom: 20px; }
     .card:not(.royal-border-skin) { border: 1px solid rgba(255,255,255,0.3); }
     .card:not(.royal-border-skin)::before { content: none; }
 
     .msg-section { width: 100%; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; }
-
     .card h2{ font-family:Cinzel, serif; margin:0 0 14px; font-size:22px; color:var(--gold-1); text-align:center; text-transform:uppercase; letter-spacing:1px; }
-
     .user-toggle { display: flex; justify-content: center; gap: 16px; margin-bottom: 18px; }
     
-    /* --- TOGGLE BUTTONS (BOTH HAVE DOUBLE BORDER NOW) --- */
+    /* --- TOGGLE BUTTONS (Always Double Border) --- */
     .toggle-btn {
       background: #fffcf5; 
-      /* Double border applied to inactive state as well */
-      border: 3px double #d4a017; 
-      color: var(--royal);
-      padding: 8px 22px; /* Adjusted slightly for border width */
-      border-radius: 25px; 
+      border: 3px double #d4a017; /* Double Gold when inactive */
+      color: var(--royal); padding: 8px 22px; border-radius: 25px; 
       font-family: Cinzel, serif; font-weight: 700; font-size: 12px; letter-spacing: 1px;
-      cursor: pointer; transition: all 0.3s ease;
-      text-transform: uppercase;
+      cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-transform: uppercase;
     }
-    
-    /* ACTIVE STATE */
     .toggle-btn.active {
-      background: linear-gradient(135deg, var(--gold-2), var(--gold-1)); 
-      color: #3a1d27; 
-      border: 3px double #8B4513 !important; 
+      background: linear-gradient(135deg, var(--gold-2), var(--gold-1)); color: #3a1d27; 
+      border: 3px double #8B4513 !important; /* Double Brown when active */
       box-shadow: 0 0 0 2px #d4a017, inset 0 0 10px rgba(212,160,40,0.1), 0 4px 15px rgba(212,160,40,0.4) !important; 
-      transform: translateY(-1px);
+      transform: scale(1.05);
     }
-    
     .toggle-btn::before { content: none !important; }
 
     .pwd-row{ display:flex; gap:14px; align-items:center; flex-direction:row; margin-top:6px; transition: all 0.5s ease; }
     .pwd-row.unlocked { justify-content: center; }
 
-    input[type="password"]{
+    /* --- TYPING DUST INPUTS --- */
+    input[type="password"], input[type="text"]{
       width:100%; flex: 1; padding:14px 18px; border-radius:22px; 
-      background: rgba(255,255,255,0.25); 
-      color:var(--royal); font-size:16px; outline:none; border: var(--embroidery-stitch);
+      background: rgba(255,255,255,0.25); color:var(--royal); 
+      font-size:16px; outline:none; border: var(--embroidery-stitch);
       box-shadow: inset 0 4px 12px rgba(212,160,40,0.05); font-family: 'Playfair Display', serif;
-      transition: all 0.3s ease;
+      transition: all 0.4s ease; user-select: text;
     }
-    input[type="password"]:focus { border-color: var(--gold-1); background: rgba(255,255,255,0.5); box-shadow: 0 0 20px rgba(212,160,40,0.25); }
+    input:focus { border-color: transparent; background: rgba(255,255,255,0.6); box-shadow: 0 0 0 2px var(--gold-1), 0 0 20px rgba(212,160,40,0.3); transform: translateY(-2px); }
 
-    /* --- DARK BROWN BUTTON --- */
+    /* --- DARK BROWN BUTTONS --- */
     button.primary{
       width:auto; padding:14px 28px; border-radius:22px; cursor:pointer;
       font-family:Cinzel, 'Playfair Display', serif; font-weight:700; letter-spacing:0.6px; text-transform:uppercase;
       background: var(--brown-dark); color: var(--gold-1);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-      border: 1px solid rgba(255, 255, 255, 0.4); 
-      transition: all 0.2s ease; z-index: 2;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid rgba(255, 255, 255, 0.4); 
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2;
     }
-    button.primary:hover{ transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 45px rgba(0,0,0,0.25); background: var(--brown-light); }
+    button.primary:hover{ transform: translateY(-3px) scale(1.05); box-shadow: 0 15px 45px rgba(0,0,0,0.25); background: var(--brown-light); }
 
     .hint{ font-size:13px; color:rgba(90,32,58,0.7); margin-top:12px; text-align:center; font-family: 'Playfair Display', serif; display: flex; flex-direction: column; align-items: center; }
     .status-dots { display: flex; gap: 20px; margin-top: 8px; font-family: 'Playfair Display', serif; font-size: 14px; color: var(--royal); }
     .status-item { display: flex; align-items: center; gap: 6px; }
-    .dot {
-      display: inline-block; width: 8px; height: 8px; border-radius: 50%;
-      background-color: #d9534f; box-shadow: 0 0 8px rgba(217, 83, 79, 0.5); transition: background-color 0.3s ease;
-    }
-    .dot.green { background-color: #5cb85c; box-shadow: 0 0 12px rgba(92, 184, 92, 0.8); }
+    .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: #d9534f; transition: background-color 0.3s ease; }
+    .dot.green { background-color: #5cb85c; box-shadow: 0 0 12px rgba(92, 184, 92, 0.8); animation: heartbeat 1.5s infinite; }
+    @keyframes heartbeat { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
 
     .msg{ margin-top:12px;padding:10px;border-radius:10px;background:rgba(255,120,140,0.1); color:#8f2e4f; border:1px solid rgba(255,120,140,0.15); display:none; text-align:center; font-family:Merriweather, serif; }
-    
-    .reveal{
-      margin-top:24px; padding:0; border-radius:18px;
-      background: transparent; border:none;
-      min-height:110px; display:flex; flex-direction: column; align-items:center;
-      opacity: 0; transform: scale(0.5); width: 100%;
-    }
+    .reveal{ margin-top:24px; padding:0; border-radius:18px; background: transparent; border:none; min-height:110px; display:flex; flex-direction: column; align-items:center; opacity: 0; transform: scale(0.5); width: 100%; }
     .secret{ font-family:'Playfair Display'; font-size:16px; line-height:1.4; color:var(--royal); white-space:pre-line; width: 100%; text-align: center; }
 
     .gold-box-title {
         background: linear-gradient(180deg, #fffcf5, #fff4e6);
-        border: 1px solid rgba(212,160,40,0.3);
-        box-shadow: 0 4px 15px rgba(212,160,40,0.15), inset 0 2px 4px rgba(255,255,255,0.8);
-        border-radius: 12px;
-        padding: 8px 24px;
-        display: inline-block;
-        margin-bottom: 15px;
-        font-family: Cinzel, serif;
-        font-weight: 700;
-        color: var(--gold-1);
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        border: 1px solid rgba(212,160,40,0.3); box-shadow: 0 4px 15px rgba(212,160,40,0.15), inset 0 2px 4px rgba(255,255,255,0.8);
+        border-radius: 12px; padding: 8px 24px; display: inline-block; margin-bottom: 15px;
+        font-family: Cinzel, serif; font-weight: 700; color: var(--gold-1); text-transform: uppercase; letter-spacing: 1px;
         text-shadow: 0 1px 2px rgba(90,32,58,0.1);
     }
+    .gold-box-title.royal-bordered { border: 3px double #8B4513; box-shadow: 0 0 0 1px #d4a017, inset 0 0 10px rgba(212,160,40,0.05); padding: 10px 28px; }
 
-    .gold-box-title.royal-bordered {
-        border: 3px double #8B4513; 
-        box-shadow: 0 0 0 1px #d4a017, inset 0 0 10px rgba(212,160,40,0.05); 
-        padding: 10px 28px;
-    }
-
-    .separator {
-        height: 1px; width: 60%;
-        background: linear-gradient(90deg, transparent, rgba(212,160,40,0.6), transparent);
-        margin: 15px auto;
-    }
-    
+    .separator { height: 1px; width: 60%; background: linear-gradient(90deg, transparent, rgba(212,160,40,0.6), transparent); margin: 15px auto; }
     .input-row { display: flex; flex-direction: row; gap: 10px; align-items: center; margin-top: 10px; width: 100%; }
-    .editable{ 
-      flex: 1; 
-      background: rgba(255,255,255,0.4); 
-      border: 2px dotted rgba(212,160,40,0.4); 
-      border-radius: 14px; padding: 12px 16px; 
-      color: var(--royal); font-family: 'Playfair Display'; font-size: 15px; outline: none; 
-    }
+    .editable{ flex: 1; background: rgba(255,255,255,0.4); border: 2px dotted rgba(212,160,40,0.4); border-radius: 14px; padding: 12px 16px; color: var(--royal); font-family: 'Playfair Display'; font-size: 15px; outline: none; transition: all 0.3s ease; }
+    .editable:focus { transform: scale(1.02); border-color: var(--gold-1); background: rgba(255,255,255,0.7); }
+
     /* --- DARK BROWN SEND BUTTON --- */
     .save-btn{ 
       width: auto; padding: 10px 24px; border-radius: 14px; cursor: pointer; 
-      background: var(--brown-dark); color: var(--gold-1); 
-      font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-      font-family: Cinzel, serif; text-transform: uppercase; letter-spacing: 1px; 
-      border: 1px solid rgba(255,255,255,0.4); 
+      background: var(--brown-dark); color: var(--gold-1); font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+      font-family: Cinzel, serif; text-transform: uppercase; letter-spacing: 1px; border: 1px solid rgba(255,255,255,0.4); 
     }
     .save-btn:hover{ transform:scale(1.03); box-shadow: 0 6px 20px rgba(0,0,0,0.2); background: var(--brown-light); }
     
@@ -296,18 +195,12 @@
     }
     
     .gold-confetti-bit { position: fixed; pointer-events:none; z-index:10; width: 6px; height: 6px; border-radius: 2px; background-color: #ffd700; }
-
-    .liquid-splash {
-      position: absolute; top: 50%; left: 50%; width: 0px; height: 0px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(212,160,40,0.4) 0%, transparent 70%);
-      border: 2px solid rgba(212,160,40,0.6); transform: translate(-50%, -50%); pointer-events: none; z-index: 5;
-    }
+    .type-spark { position: absolute; width: 4px; height: 4px; background: gold; border-radius: 50%; pointer-events: none; z-index: 20; }
+    .liquid-splash { position: absolute; top: 50%; left: 50%; width: 0px; height: 0px; border-radius: 50%; background: radial-gradient(circle, rgba(212,160,40,0.4) 0%, transparent 70%); border: 2px solid rgba(212,160,40,0.6); transform: translate(-50%, -50%); pointer-events: none; z-index: 5; }
   </style>
 </head>
 <body>
-  
   <div id="bg-fx"></div>
-
   <div class="stage">
     <div class="hero">
       <div class="brand"><div class="logo">Sidham</div></div>
@@ -317,20 +210,16 @@
 
     <div class="card-wrap" style="width: 100%; display: flex; justify-content: center;">
       <div class="card royal-border-skin has-crown" id="main-card">
-        
         <div id="top-section">
-            <h2>EMERGENCY LINE</h2>
-
+            <h2 id="emergency-title">EMERGENCY LINE</h2>
             <div class="user-toggle" id="toggleContainer">
               <button class="toggle-btn" id="btn-sid">I am SID</button>
               <button class="toggle-btn" id="btn-bebaaa">I am BEBAAA</button>
             </div>
-
             <div class="pwd-row">
               <input id="pwd" type="password" placeholder="Enter Contact No." />
               <button id="submit" class="primary">GO AHEAD</button>
             </div>
-
             <div class="hint">
               SOS
               <div class="status-dots" id="status-dots-container">
@@ -340,7 +229,6 @@
             </div>
             <div class="msg" id="msg">Incorrect Contact No. Try again.</div>
         </div>
-
         <div class="reveal" id="revealArea">
           <div class="secret" id="secret"></div>
         </div>
@@ -349,6 +237,7 @@
   </div>
 
   <script>
+    gsap.registerPlugin(TextPlugin);
     const firebaseConfig = {
       apiKey: "AIzaSyBSMypTNkkeH4hgtKIonNOccRC1-jRiRZg",
       authDomain: "sidham-6d564.firebaseapp.com",
@@ -382,6 +271,9 @@
     const topSection = document.getElementById('top-section');
     const statusRef = db.ref('status');
 
+    gsap.to("#title", {duration: 1.5, text: {value: "Welcome to Sidham", delimiter: ""}, ease: "none", delay: 0.5});
+    gsap.from("#title", {duration: 1.5, opacity: 0, scale: 0.9, delay: 0.5});
+
     statusRef.on('value', (snap) => {
       const data = snap.val() || {};
       if (data.sid === 'unread') dotSid.classList.add('green');
@@ -390,12 +282,15 @@
       else dotBebaaa.classList.remove('green');
     });
 
+    function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
+
     btnSid.addEventListener('click', () => {
       selectedUser = 'sid';
       btnSid.classList.add('active');
       btnBebaaa.classList.remove('active');
       pwd.placeholder = "Enter SID's Contact No.";
       pwd.focus();
+      triggerHaptic();
     });
     btnBebaaa.addEventListener('click', () => {
       selectedUser = 'bebaaa';
@@ -403,16 +298,33 @@
       btnSid.classList.remove('active');
       pwd.placeholder = "Enter BEBAAA's Contact No.";
       pwd.focus();
+      triggerHaptic();
     });
+
+    function addTypingSparkles(inputElement) {
+        inputElement.addEventListener('input', (e) => {
+            const rect = inputElement.getBoundingClientRect();
+            const spark = document.createElement('div');
+            spark.className = 'type-spark';
+            spark.style.left = (rect.left + Math.random() * rect.width) + 'px';
+            spark.style.top = (rect.top + rect.height/2) + 'px';
+            document.body.appendChild(spark);
+            gsap.to(spark, { y: -30 - Math.random()*30, x: (Math.random()-0.5)*30, opacity: 0, scale: 0, duration: 0.8, onComplete: () => spark.remove() });
+        });
+    }
+    addTypingSparkles(pwd);
 
     btn.addEventListener('click', () => {
       if (btn.textContent === 'LOCK') {
+        if (navigator.vibrate) navigator.vibrate([50, 50, 50]); 
         gsap.to(revealArea, { scale: 0, opacity: 0, duration: 0.5, ease: "back.in(1.7)", onComplete: () => {
             revealArea.style.display = 'none';
             topSection.classList.remove('royal-border-skin', 'has-crown');
             mainCard.classList.add('royal-border-skin', 'has-crown');
             mainCard.classList.remove('unlocked-glow');
-            gsap.fromTo(mainCard, { scale: 1.02 }, { scale: 1, duration: 0.4, ease: "bounce.out" });
+            
+            gsap.fromTo(mainCard, { scale: 1.03 }, { scale: 1, duration: 0.4, ease: "bounce.out" });
+            
             pwd.style.display = 'block';
             toggleContainer.style.display = 'flex';
             gsap.to([pwd, toggleContainer], { opacity: 1, duration: 0.5, delay: 0.2 });
@@ -434,14 +346,18 @@
       auth.signInWithEmailAndPassword(emailToUse, pass)
         .then(() => {
           msg.style.display = 'none';
+          if (navigator.vibrate) navigator.vibrate(20);
+          
           gsap.to([pwd, toggleContainer], { opacity:0, duration:0.3, onComplete: () => {
             pwd.style.display = 'none';
             toggleContainer.style.display = 'none';
             pwdRow.classList.add('unlocked');
             btn.textContent = 'LOCK';
+            
             mainCard.classList.remove('royal-border-skin', 'has-crown');
             mainCard.classList.add('unlocked-glow'); 
             topSection.classList.add('royal-border-skin', 'has-crown');
+
             triggerSplashReveal();
             loadSecretArea();
           }});
@@ -457,15 +373,9 @@
         const splash = document.createElement('div');
         splash.className = 'liquid-splash';
         mainCard.appendChild(splash);
-
-        gsap.to(splash, {
-            width: 800, height: 800, opacity: 0, duration: 1.32, 
-            ease: "power2.out", onComplete: () => splash.remove()
-        });
-
+        gsap.to(splash, { width: 800, height: 800, opacity: 0, duration: 1.32, ease: "power2.out", onComplete: () => splash.remove() });
         revealArea.style.display = 'flex'; 
         gsap.to(revealArea, { scale: 1, opacity: 1, duration: 1.54, ease: "elastic.out(1, 0.5)", delay: 0.1 });
-        
         gsap.from('.msg-section', { y: 50, opacity: 0, duration: 0.9, stagger: 0.2, delay: 0.3, ease: "back.out(1.7)" });
     }
 
@@ -473,6 +383,8 @@
       msg.textContent = txt;
       msg.style.display = 'block';
       gsap.from(msg, {y:-5, opacity:0, duration:0.3});
+      gsap.to(msg, {x:10, duration:0.1, yoyo:true, repeat:5});
+      if (navigator.vibrate) navigator.vibrate([50, 100, 50]);
     }
 
     function loadSecretArea() {
@@ -480,7 +392,6 @@
       else statusRef.update({ sid: 'read' });
 
       const secureRef = db.ref('secure_messages');
-      
       const sidSection = document.createElement('div');
       sidSection.className = 'msg-section'; 
       const sidTitle = document.createElement('div');
@@ -538,18 +449,20 @@
         const inp = document.createElement('input');
         inp.className = 'editable';
         inp.placeholder = 'Write message...';
+        addTypingSparkles(inp);
         const b = document.createElement('button');
         b.className = 'save-btn';
         b.textContent = 'SEND';
         row.appendChild(inp);
         row.appendChild(b);
-        
         b.addEventListener('click', (e) => {
-           const txt = inp.value.trim();
-           if(!txt) return;
-           sendCallback(txt);
-           inp.value = '';
-           spawnDenseGoldConfetti(e.target); 
+            e.stopPropagation(); // Prevent global smooches
+            const txt = inp.value.trim();
+            if(!txt) return;
+            sendCallback(txt);
+            inp.value = '';
+            spawnDenseGoldConfetti(e.target); 
+            if (navigator.vibrate) navigator.vibrate(20);
         });
         return row;
     }
@@ -593,7 +506,6 @@
        });
        gsap.to(el, { opacity: 1, duration: 1 });
     }
-    
     setInterval(createFloater, 250);
     for(let i=0; i<20; i++) { setTimeout(createFloater, i*200); }
 
@@ -621,6 +533,36 @@
           });
         }
     }
+    
+    // --- GLOBAL SMOOCH EFFECT ---
+    function spawnSmooches(x, y) {
+        for(let i=0; i<12; i++) {
+            const el = document.createElement('div');
+            el.innerText = '💋';
+            el.style.position = 'fixed';
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            el.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            el.style.pointerEvents = 'none';
+            el.style.zIndex = 100;
+            document.body.appendChild(el);
+            gsap.to(el, {
+                x: (Math.random() - 0.5) * 150,
+                y: (Math.random() - 0.5) * 150,
+                opacity: 0,
+                scale: 1.5,
+                duration: 1.2,
+                ease: "power2.out",
+                onComplete: () => el.remove()
+            });
+        }
+    }
+
+    document.addEventListener('click', (e) => {
+        // Exclude buttons and inputs from smooches
+        if(e.target.closest('button') || e.target.closest('.toggle-btn') || e.target.tagName === 'INPUT') return;
+        spawnSmooches(e.clientX, e.clientY);
+    });
 
     gsap.from('.logo', {y:-20, opacity:0, duration:1});
     gsap.from('.card', {scale:0.9, opacity:0, duration:1, delay:0.2});
